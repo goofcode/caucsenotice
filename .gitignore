@@ -1,2 +1,5 @@
 lion/setting.json
 phantomjs
+node_modules/
+data/
+log/
