@@ -12,7 +12,7 @@ if __name__ == '__main__':
         crawled = json.load(data_json)
 
     category_name = {"ict": "ICT 공과대학", "cse": "컴퓨터공학부", "accord": "서울어코드"}
-    message_content = '에 새로운 공지사항이 있습니다!\n'
+    message_content = '에 새로운 공지사항이 있습니다!!\n'
 
     for ict_notice in crawled["ict"]:
         plus_message.send_basic_text_message(content=category_name["ict"]+message_content + ict_notice["title"],link=ict_notice["url"])
