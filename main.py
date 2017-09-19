@@ -22,9 +22,11 @@ if __name__ == '__main__':
         plus_message.send_basic_text_message(content=category_name["accord"] + message_content + accord_notice["title"], link=accord_notice["url"])
 
 
-    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     num_msg = len(crawled["ict"]) + len(crawled["cse"]) + len(crawled["accord"])
-    
-    log_str = timestamp + ': ' + str(num_msg) + ' message(s) sent\n' 
-    print(log_str) 
+   
+    if num_msg is 0:
+        timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        log_str = timestamp + ': ' + str(num_msg) + ' message(s) sent\n' 
+        print(log_str) 
+
 
