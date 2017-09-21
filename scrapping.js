@@ -190,7 +190,15 @@ function _update() {
 	console.log(old_data);
         update_old();
         fs.writeFileSync('data/old_data.json', JSON.stringify(old_data), 'utf8');
-    }).catch(function(error){console.log(error);});
+    }).catch(function(error){console.log(error);
+        filter_date();
+        filter_old();
+        fs.writeFileSync('data/data.json', JSON.stringify(data),'utf8');
+	logger.log('info', data);
+	console.log(old_data);
+        update_old();
+        fs.writeFileSync('data/old_data.json', JSON.stringify(old_data), 'utf8');
+});
 }
 
 exports.update=_update;

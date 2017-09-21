@@ -11,22 +11,21 @@ if __name__ == '__main__':
     with open(data_path, 'r', encoding='utf-8') as data_json:
         crawled = json.load(data_json)
 
-    category_name = {"ict": "ICT 공과대학", "cse": "컴퓨터공학부", "accord": "서울어코드"}
-    message_content = '에 새로운 공지사항이 있습니다!!\n'
+    category_name = {"ict": "[ICT 공과대학]\n", "cse": "[컴퓨터공학부]\n", "accord": "[서울어코드]\n"}
 
     for ict_notice in crawled["ict"]:
-        plus_message.send_basic_text_message(content=category_name["ict"]+message_content + ict_notice["title"],link=ict_notice["url"])
+        plus_message.send_basic_text_message(content=category_name["ict"] + ict_notice["title"],link=ict_notice["url"])
     for cse_notice in crawled["cse"]:
-        plus_message.send_basic_text_message(content=category_name["cse"]+message_content + cse_notice["title"], link=cse_notice["url"])
+        plus_message.send_basic_text_message(content=category_name["cse"] + cse_notice["title"], link=cse_notice["url"])
     for accord_notice in crawled["accord"]:
-        plus_message.send_basic_text_message(content=category_name["accord"] + message_content + accord_notice["title"], link=accord_notice["url"])
+        plus_message.send_basic_text_message(content=category_name["accord"] + accord_notice["title"], link=accord_notice["url"])
 
 
     num_msg = len(crawled["ict"]) + len(crawled["cse"]) + len(crawled["accord"])
    
-    if num_msg is 0:
-        timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-        log_str = timestamp + ': ' + str(num_msg) + ' message(s) sent\n' 
+    if num_msg is not 0:
+        timestamp = '['+ datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']'
+        log_str = timestamp + ': ' + str(num_msg) + ' message(s) sent' 
         print(log_str) 
 
 
