@@ -1,9 +1,9 @@
 /**
- * Created by md98 on 17. 7. 26.
- */
+* Created by md98 on 17. 7. 26.
+    */
 
-// urls
-let ict_url = 'http://ict.cau.ac.kr/20150610/sub05/sub05_01_list.php';
+    // urls
+    let ict_url = 'http://ict.cau.ac.kr/20150610/sub05/sub05_01_list.php';
 let ictdb = 'db/ict.db';
 let cse_url = 'http://cse.cau.ac.kr/20141201/sub05/sub0501.php';
 let csedb = 'db/cse.db';
@@ -45,6 +45,9 @@ function parseIct(body){
                 'title': $(children[1]).text().replace(/[\n\t\r]/g, ''),
                 'last_update' : $(children[2]).text()
             };
+            if(row['title'].substr(row['title'].length-2, 2)=='새글'){
+                row['title']=row['title'].substr(0, row['title'].length-2);
+            }
             postarray.push(row);
         });
         resolve(postarray);
@@ -59,11 +62,11 @@ function pushIct(postarray){
 function requestCse(){
     return new Promise(function(resolve, reject){
         request(cse_url, function(error, response, body){
-           if (error){
-               logger.log('error', error);
-               reject(error);
-           }
-           resolve(body);
+            if (error){
+                logger.log('error', error);
+                reject(error);
+            }
+            resolve(body);
         });
     });
 }
@@ -71,7 +74,7 @@ function parseCse(body){
     let postarray=[];
     return new Promise(function(resolve, reject){
         let $ = cheerio.load(body, {
-           normalizeWhitespace: true
+            normalizeWhitespace: true
         });
         let postElements = $('table.nlist tbody tr');
         postElements.each(function (){
@@ -81,6 +84,9 @@ function parseCse(body){
                 'title': $(children[2]).text().replace(/[\n\t\r]/g,''),
                 'last_update' : $(children[4]).text()
             };
+            if(row['title'].substr(row['title'].length-2, 2)=='새글'){
+                row['title']=row['title'].substr(0, row['title'].length-2);
+            }
             postarray.push(row);
         });
         resolve(postarray);
@@ -149,57 +155,53 @@ function update_old(){
 
 function _update() {
     let ict = new Promise(function(resolve, reject){
-    requestIct()
-        .then(parseIct)
-        .then(pushIct)
-        .then(function(){
-            resolve();
-        })
-        .catch(function(error){
-            logger.log('error', error);
-        });
-    });
-    let cse = new Promise(function(resolve, reject){
-    requestCse()
-        .then(parseCse)
-        .then(pushCse)
-        .then(function(){
-            resolve();
-            })
-        .catch(function(error){
-            logger.log('error', error);
-        });
-    });
-    let accord = new Promise(function(resolve, reject){
-        requestAccord()
-        .then(parseAccord)
-        .then(pushAccord)
+        requestIct()
+            .then(parseIct)
+            .then(pushIct)
             .then(function(){
                 resolve();
             })
-        .catch(function(error){
-            logger.log('error', error);
-        });
+            .catch(function(error){
+                logger.log('error', error);
+            });
+    });
+    let cse = new Promise(function(resolve, reject){
+        requestCse()
+            .then(parseCse)
+            .then(pushCse)
+            .then(function(){
+                resolve();
+            })
+            .catch(function(error){
+                logger.log('error', error);
+            });
+    });
+    let accord = new Promise(function(resolve, reject){
+        requestAccord()
+            .then(parseAccord)
+            .then(pushAccord)
+            .then(function(){
+                resolve();
+            })
+            .catch(function(error){
+                logger.log('error', error);
+            });
     })
     Promise.all([ict, cse, accord]).then(function(){
-	console.log(data);
-	console.log(old_data);
         filter_date();
         filter_old();
         fs.writeFileSync('data/data.json', JSON.stringify(data),'utf8');
-	logger.log('info', data);
-	console.log(old_data);
+        logger.log('info', data);
         update_old();
         fs.writeFileSync('data/old_data.json', JSON.stringify(old_data), 'utf8');
-    }).catch(function(error){console.log(error);
+    }).catch(function(error){
         filter_date();
         filter_old();
         fs.writeFileSync('data/data.json', JSON.stringify(data),'utf8');
-	logger.log('info', data);
-	console.log(old_data);
+        logger.log('info', data);
         update_old();
         fs.writeFileSync('data/old_data.json', JSON.stringify(old_data), 'utf8');
-});
+    });
 }
 
 exports.update=_update;
@@ -208,7 +210,6 @@ let scrapping_rule = new schedule.RecurrenceRule();
 scrapping_rule.minute = new schedule.Range(0,59,5);
 schedule.scheduleJob(scrapping_rule, function() {
     logger.log('info', 'cronjob start update');
-    console.log( 'cronjob start update');
     _update();
 });
 let log_rule = new schedule.RecurrenceRule();
