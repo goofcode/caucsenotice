@@ -9,14 +9,15 @@ let cse_url = 'http://cse.cau.ac.kr/20141201/sub05/sub0501.php';
 let csedb = 'db/cse.db';
 let accord_url = 'http://cse.cau.ac.kr/20141201/sub04/sub0403.php';
 let accorddb = 'db/accord.db';
-logger=require('./logger.js').logger('log/scrapping.log');
 let request = require('request');
 let cheerio = require('cheerio');
 let moment = require('moment');
 let fs = require('fs');
 let data = {};
 let old_data = require('./data/old_data.json');
-
+let today = moment().format('YYYY.MM.DD');
+logger=require('./logger.js').logger('log/'+today+'.log');
+let recent_days=[];
 // Read ICT Page
 
 function requestIct(){
@@ -128,7 +129,7 @@ function pushAccord(postarray){
     });
 }
 function filter_date(){
-    let today = moment().format('YYYY.MM.DD');
+    today = moment().format('YYYY.MM.DD');
     data['ict'] = data['ict'].filter(function(item){return item['last_update']==today;})
     data['cse'] = data['cse'].filter(function(item){return item['last_update']==today;})
     data['accord'] = data['accord'].filter(function(item){return item['last_update']==today;})
@@ -203,11 +204,21 @@ function _update() {
 
 exports.update=_update;
 let schedule = require('node-schedule');
-let rule = new schedule.RecurrenceRule();
-rule.minute = new schedule.Range(0,59,5);
-schedule.scheduleJob(rule, function() {
+let scrapping_rule = new schedule.RecurrenceRule();
+scrapping_rule.minute = new schedule.Range(0,59,5);
+schedule.scheduleJob(scrapping_rule, function() {
     logger.log('info', 'cronjob start update');
     console.log( 'cronjob start update');
     _update();
 });
-
+let log_rule = new schedule.RecurrenceRule();
+log_rule.hour = 21;
+schedule.scheduleJob(log_rule, function(){
+    for(let i=0;i<8;i++){
+        recent_days[i]=moment().subtract(i,'days').format('YYYY.MM.DD');
+    }
+    logger=require('./logger.js').logger('log/'+today+'.log');
+    fs.unlink('log/'+recent_days[7]+'.log', function(err){
+        logger.log('info', recent_days[7]+'.log file delete');
+    });
+});
