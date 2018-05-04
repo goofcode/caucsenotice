@@ -12,17 +12,18 @@
 })(jQuery); // End of use strict
 
 
-$('#send').click(function(){
+
+$(document).ready(function(){
     "use strict";
-    var email = $("#email").val();
-    var regex=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-    if(regex.test(email) === false){
-        alert("Wrong Email Format!.");
-        return false;
-    } else {
-        $.post('sendEmail', {email: email}, function (result) {
-            // Complete Send mail
-            alert('Thank you for subscribing!');
-        });
-    }
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+$('#mail').click(function(){
+    "use strict";
+    const el = document.createElement('textarea');
+    el.value = 'minn951120@naver.com, makerdark98@naver.com';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("Copy");
+    alert("Copied the developer's mail");
 });
