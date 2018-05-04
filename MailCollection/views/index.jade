@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .overlay
+  .masthead
+      .masthead-bg
+      .container.h-100
+          .row.h-100
+              .col-12.my-auto
+                  .masthead-content.text-white.py-5.py-md-0
+                      h1.mb-3 CAUCSE!
+                      p.mb-5
+                          | We're working hard to finish the development of this site. Our target launch date is
+                          strong January 2019
+                          | ! Sign up for updates using the form below!
+                      .input-group.input-group-newsletter
+                          input.form-control#email(type='email', placeholder='Enter email...', aria-label='Enter email...', aria-describedby='basic-addon')
+                          .input-group-append
+                              button.btn.btn-secondary#send(type='button') Notify Me!
+  .social-icons
+      ul.list-unstyled.text-center.mb-0
+          li.list-unstyled-item
+              a(href='mailto:minn951120@naver.com?cc=makerdark98@naver.com')
+                  i.fa.fa-envelope

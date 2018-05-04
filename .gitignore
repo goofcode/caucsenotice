@@ -2,4 +2,6 @@ lion/setting.json
 phantomjs
 *.log
 node_modules/
+*/node_moduels/
+**/.idea
 data/
