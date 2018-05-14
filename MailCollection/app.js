@@ -13,6 +13,7 @@ var sendMail = require('./routes/sendEmail');
 var robots = require('./routes/robots');
 var unsubscribe = require('./routes/unsubscribe');
 var removeEmail = require('./routes/removeEmail');
+var agree = require('./routes/agree');
 
 var app = express();
 app.use(helmet());
@@ -41,6 +42,7 @@ app.use('/sendEmail', sendMail);
 app.use('/robots.txt', robots);
 app.use('/unsubscribe', unsubscribe);
 app.use('/removeEmail', removeEmail);
+app.use('/agree', agree);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

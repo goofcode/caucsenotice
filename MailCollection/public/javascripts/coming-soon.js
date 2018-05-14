@@ -1,13 +1,26 @@
+function isMobile() {
+    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent));
+}
+
 (function($) {
   "use strict"; // Start of use strict
 
   // Vide - Video Background Settings
-  $('body').vide({
-    mp4: "mp4/bg.mp4",
-    poster: "img/bg-mobile-fallback.jpg"
-  }, {
-    posterType: 'jpg'
-  });
+  if(isMobile()){
+      $('body').vide({
+          poster: "img/bg-mobile-fallback.jpg"
+      }, {
+          posterType: 'jpg'
+      });
+  }
+  else {
+      $('body').vide({
+          mp4: "mp4/bg.mp4",
+          poster: "img/bg-mobile-fallback.jpg"
+      }, {
+          posterType: 'jpg'
+      });
+  }
 
 })(jQuery); // End of use strict
 
